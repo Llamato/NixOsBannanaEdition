@@ -5,19 +5,19 @@
 }: {
   system = "armv7l-linux";
   modules = [
-    outputs.nixosModules.default # baseline
-    #inputs.lix-module.nixosModules.default
-    #inputs.ha-linux-desktop.nixosModules.default
-
+    outputs.nixosModules.default
     ({
       config,
       pkgs,
       lib,
       ...
-    }: {
-      # actual configuration
-      system.stateVersion = "23.05";
-      
+    }: let 
+        sshKeys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE5gfkj8BLRw6KBWJhlKbr3PDPzEunDrLH70cLI2VQhlVNccUlcYebS8LdVkPyyzGh9xaSmn0zkIZq7kGZAeOy3rlSQz/sFQ0zRicfb6uD2GVndn51drJQPthdxypGhl24JClyN0knhrils4angEMZFkq+UZr8ku7/wJxiXSbiiO5TUU0L26Ijk2kCEcHlRrjMyANMznE3UYffqcwlLOd+udqOrPwC9Hk/DdyDRzLsXcPVE+6prgFg+vx5OEdvdAO6QuO1S1zxKq9hRDJ7mELEmWjmHjuvfEY+ZVRUaP7dFAejyr+I3GFshhZu7OkGtD5Gd0SF5P4jNzGobcEYaJsJ tina" ];
+      in { 
+
+      #System Config
+      system.stateVersion = "25.05";
+    
       # locale config
       time.timeZone = "Europe/Berlin";
       i18n.defaultLocale = "en_US.UTF-8";
@@ -33,7 +33,7 @@
         initialPassword = "llamato";
         packages = with pkgs; [  
           sl
-          neofetch #23.05
+          fastfetch
         ];
       };
 
@@ -44,10 +44,9 @@
         wget
         btop
       ];
-      # end of  config
 
       # Lets make an sd image
-      sdImage.compressImage = false;
+      sdImage.compressImage = true;
       documentation = {
         doc.enable = false;
         info.enable = false;
@@ -60,8 +59,13 @@
           dates = "daily";
           options = "--delete-older-than 7d";
         };
-        settings = {experimental-features = ["nix-command" "flakes"];};
+
+        settings = {
+          experimental-features = ["nix-command" "flakes"];
+          trusted-users = sshKeys;
+        };
       };
+      users.users.root.openssh.authorizedKeys.keys = sshKeys;
 
       hardware.enableRedistributableFirmware = true;
       networking = {
@@ -90,20 +94,17 @@
         };*/
         openssh = {
           enable = true;
-          #permitRootLogin = true;
-          # authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-          # settings = {
-          #   KbdInteractiveAuthentication = lib.mkDefault false;
-          #   PasswordAuthentication = lib.mkDefault false;
-          #   PermitRootLogin = lib.mkDefault "yes";
-          # };
+            #authorizedKeysFiles = lib.mkForce [""];
+            settings = {
+              KbdInteractiveAuthentication = lib.mkDefault false;
+              PasswordAuthentication = lib.mkDefault false;
+              PermitRootLogin = lib.mkDefault "yes";
+            };
         };
       };
       #systemd.services.ha-ddc.environment.RUST_LOG = "info,ha_ddc=debug,ha_discovery_config=debug";
 
-      /*users.users.root.openssh.authorizedKeys.keys = [
-      ];*/
-
+      
       #ddcci-driver.enable = true;
       boot = {
         kernelModules = ["i2c-dev"];
