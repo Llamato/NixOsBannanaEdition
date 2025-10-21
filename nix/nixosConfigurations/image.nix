@@ -14,11 +14,16 @@
     }: let 
         sshKeys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE5gfkj8BLRw6KBWJhlKbr3PDPzEunDrLH70cLI2VQhlVNccUlcYebS8LdVkPyyzGh9xaSmn0zkIZq7kGZAeOy3rlSQz/sFQ0zRicfb6uD2GVndn51drJQPthdxypGhl24JClyN0knhrils4angEMZFkq+UZr8ku7/wJxiXSbiiO5TUU0L26Ijk2kCEcHlRrjMyANMznE3UYffqcwlLOd+udqOrPwC9Hk/DdyDRzLsXcPVE+6prgFg+vx5OEdvdAO6QuO1S1zxKq9hRDJ7mELEmWjmHjuvfEY+ZVRUaP7dFAejyr+I3GFshhZu7OkGtD5Gd0SF5P4jNzGobcEYaJsJ tina" ];
       in { 
-
-      #System Config
-      system.stateVersion = "25.05";
-    
-      # locale config
+      
+      # Lets make an sd image
+      sdImage.compressImage = true;
+      documentation = {
+        doc.enable = false;
+        info.enable = false;
+        nixos.includeAllModules = true;
+      };
+     
+      # Locale config
       time.timeZone = "Europe/Berlin";
       i18n.defaultLocale = "en_US.UTF-8";
 
@@ -45,14 +50,7 @@
         btop
       ];
 
-      # Lets make an sd image
-      sdImage.compressImage = true;
-      documentation = {
-        doc.enable = false;
-        info.enable = false;
-        nixos.includeAllModules = true;
-      };
-
+      # Clear nix cache every day
       nix = {
         gc = {
           automatic = true;
@@ -60,19 +58,24 @@
           options = "--delete-older-than 7d";
         };
 
+        # Mostly ssh key setup
         settings = {
           experimental-features = ["nix-command" "flakes"];
           trusted-users = sshKeys;
         };
       };
-      users.users.root.openssh.authorizedKeys.keys = sshKeys;
+      users.users.root.openssh.authorizedKeys.keys = sshKeys; 
+      users.users.tina.openssh.authorizedKeys.keys = sshKeys;
 
       hardware.enableRedistributableFirmware = true;
+      
+      # Networking config
       networking = {
         hostName = "bpi";
-        firewall.enable = false;
+        /*firewall.enable = false;
+        useDHCP = true;*/
+        useNetworkd = true;
       };
-      systemd.network.networks."99-ethernet-default-dhcp".networkConfig.MulticastDNS = true;
 
       services = {
         /*xserver = { #23.xx and earlier only
@@ -94,21 +97,29 @@
         };*/
         openssh = {
           enable = true;
-            #authorizedKeysFiles = lib.mkForce [""];
             settings = {
               KbdInteractiveAuthentication = lib.mkDefault false;
-              PasswordAuthentication = lib.mkDefault false;
-              PermitRootLogin = lib.mkDefault "yes";
+              PasswordAuthentication = lib.mkDefault true;
+              PermitRootLogin = "prohibit-password";
             };
         };
       };
-      #systemd.services.ha-ddc.environment.RUST_LOG = "info,ha_ddc=debug,ha_discovery_config=debug";
 
-      
-      #ddcci-driver.enable = true;
+
       boot = {
-        kernelModules = ["i2c-dev"];
+        kernelModules = ["i2c-dev" "sunxi-ephy"];
+        kernelParams = [
+          "sunxi_emac.phy_interface=1"
+          "sunxi_emac.rx_delay=3"
+          "sunxi_emac.tx_delay=3"
+          # Alternative parameters to try
+          #"libahci.ignore_sss=1"
+          #"ahci.sunxi_enable_0=1"
+        ];
       };
+
+      # System Config (Only change for redeploys and new deployments)
+      system.stateVersion = "25.05";
     })
   ];
 }

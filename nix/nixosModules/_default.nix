@@ -25,7 +25,35 @@ in {
       supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ];
     };
 
-    hardware.deviceTree.enable = false; #Comes with uboot
+    hardware.deviceTree.enable = false; # Comes with uboot
+    systemd.network = {
+      enable = true;
+
+      networks."99-ethernet-default-dhcp" = {
+        matchConfig.Name = "end0";
+        networkConfig = {
+          DHCP = "yes";
+          MulticastDNS = true;
+        };
+
+        linkConfig = {
+          RequiredForOnline = "routable";
+          ActivationPolicy = "always-up";
+        };
+      };
+    };
+
+    systemd.services.bring-up-end0 = {
+      description = "Bring up end0 network interface";
+      after = ["network.target" "systemd-networkd.service"];
+      wants = ["network.target"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.iproute2}/bin/ip link set end0 up";
+      };
+      wantedBy = ["multi-user.target"];
+    };
 
     sdImage = { 
       postBuildCommands = ''
