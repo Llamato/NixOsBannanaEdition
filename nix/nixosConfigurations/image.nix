@@ -118,6 +118,23 @@
         ];
       };
 
+      system.activationScripts.setupDevConfig = let
+        flakeFiles = pkgs.stdenv.mkDerivation {
+          name = "bananapi-flake-files";
+          src = ../../dotfiles/.;
+          installPhase = ''
+            mkdir -p $out
+            cp -R ./* $out/
+            rm -f $out/result*
+          '';
+        };
+      in ''
+        mkdir -p /etc/nixos
+        cp -R ${flakeFiles}/* /etc/nixos/
+        chown -R root:root /etc/nixos
+        chmod -R u+w /etc/nixos
+      '';
+
       # System Config (Only change for redeploys and new deployments)
       system.stateVersion = "25.05";
     })
