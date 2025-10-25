@@ -76,7 +76,7 @@
         useDHCP = true;*/
         useNetworkd = true;
       };
-
+      
       services = {
         /*xserver = { #23.xx and earlier only
           enable = true;
@@ -85,16 +85,16 @@
         };*/
         
         #25.05 only
-        /*displayManager.sddm.enable = true;
-        desktopManager.plasma6.enable = true;*/
+        displayManager.sddm.enable = true;
+        desktopManager.plasma6.enable = true;
         
-        /*pulseaudio.enable = false;
+        pulseaudio.enable = false;
         pipewire = {
           enable = true;
           alsa.enable = true;
           alsa.support32Bit = true;
           pulse.enable = true;
-        };*/
+        };
         openssh = {
           enable = true;
             settings = {
