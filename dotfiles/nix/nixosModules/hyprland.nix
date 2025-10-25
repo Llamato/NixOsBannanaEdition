@@ -16,7 +16,7 @@ in {
     package = hyprland;
     xwayland.enable = true;
     portalPackage = xdg-desktop-portal-hyprland;
-    plugins = [split-monitor-workspaces hyprsplit easymotion];
+    plugins = [/*split-monitor-workspaces*/ /*hyprsplit*/ /*easymotion*/];
   };
 
   fonts.packages = with pkgs; [

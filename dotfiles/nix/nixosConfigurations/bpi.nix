@@ -1,13 +1,13 @@
-{ config, pkgs, lib, modulesPath, ... }: let 
+{ config, pkgs, lib, modulesPath, inputs, buildPlatform, ... }: let 
         sshKeys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE5gfkj8BLRw6KBWJhlKbr3PDPzEunDrLH70cLI2VQhlVNccUlcYebS8LdVkPyyzGh9xaSmn0zkIZq7kGZAeOy3rlSQz/sFQ0zRicfb6uD2GVndn51drJQPthdxypGhl24JClyN0knhrils4angEMZFkq+UZr8ku7/wJxiXSbiiO5TUU0L26Ijk2kCEcHlRrjMyANMznE3UYffqcwlLOd+udqOrPwC9Hk/DdyDRzLsXcPVE+6prgFg+vx5OEdvdAO6QuO1S1zxKq9hRDJ7mELEmWjmHjuvfEY+ZVRUaP7dFAejyr+I3GFshhZu7OkGtD5Gd0SF5P4jNzGobcEYaJsJ tina" ];
       in {
 
-      #imports = [ "${modulesPath}/installer/sd-card/sd-image-armv7l-multiplatform.nix" ];
-
       # Build config
-      nixpkgs.buildPlatform.system = "x86_64-linux";
+      nixpkgs.buildPlatform.system = buildPlatform;
       #nixpkgs.buildPlatform.system = "armv7l-linux";
-      #boot.kernelPackages = pkgs.linuxPackages_latest;
+
+      #Needed for kernels newer then 6.12.54
+      boot.kernelPackages = pkgs.linuxPackages_latest; 
       
       # Locale config
       time.timeZone = "Europe/Berlin";
@@ -74,7 +74,7 @@
       };
 
     hardware.enableRedistributableFirmware = true;
-    hardware.opengl.enable = true;
+    hardware.graphics.enable = true;
 
 
   # Do not change !!!

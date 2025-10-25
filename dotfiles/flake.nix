@@ -2,7 +2,7 @@
   description = "NixOS on Banana Pi M1";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     gcalc = {
@@ -39,15 +39,21 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, ... } @inputs: {
     nixosConfigurations = {
       bpi = nixpkgs.lib.nixosSystem {
       system = "armv7l-linux";
-      modules = [ 
-        ./nix/nixosConfigurations/bpi.nix
-        #./nix/nixosModules/hyprland.nix
-      ];
+      specialArgs = { 
+          inherit inputs;
+          #buildPlatform = "armv7l-linux";
+          buildPlatform = builtins.currentSystem or "x86_64-linux";
+      };
+        modules = [ 
+          ./nix/nixosConfigurations/bpi.nix
+          #./nix/nixosModules/hyprland.nix
+          ./nix/nixosModules/lxde.nix
+        ];
+      };
     };
-  };
   };
 }
