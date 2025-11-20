@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760359755,
-        "narHash": "sha256-k7sJPDPio2vQuqSJ/3nOkBy6I2YqZvJYNhJJARLSxrg=",
+        "lastModified": 1761636064,
+        "narHash": "sha256-xAbEYL5gqPnBfXOIGToPjF6E0n9RSe8YJ6E2/ePrPaM=",
         "owner": "nix-community",
         "repo": "flakelight",
-        "rev": "d8d6ce0774c3df8f7b58b4cd4b5cf4b63b4a9fe6",
+        "rev": "2c621bc66465c457b64b016bb00d575ff2e51094",
         "type": "github"
       },
       "original": {
@@ -22,16 +22,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1760580664,
-        "narHash": "sha256-/YdfibIrnqXAL8p5kqCU345mzpHoOtuVIkMiI2pF4Dc=",
-        "owner": "NixOS",
+        "lastModified": 1761668703,
+        "narHash": "sha256-O9y1m6dmAzyIpTDGHPmmAEkt/hmIvuvtjyqIKAgNDAY=",
+        "owner": "llamato",
         "repo": "nixpkgs",
-        "rev": "98ff3f9af2684f6136c24beef08f5e2033fc5389",
+        "rev": "c5889de4e181127707fdaf527d682c9d2c7410a9",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-25.05",
+        "owner": "llamato",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
