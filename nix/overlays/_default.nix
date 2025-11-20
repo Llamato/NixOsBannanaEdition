@@ -10,4 +10,5 @@ in {
   efivar = stub; # does not (cross)build
   efibootmgr = stub; # depends on efivar
   xfsprogs = stub;
+  #xwayland = stub;
 }

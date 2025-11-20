@@ -5,6 +5,7 @@
   ...
 }: let
   buildSystem = "x86_64-linux"; # FIXME: parameterize it somehow?
+  #buildSystem = "armv7l-linux"; # Somehow now completely broken....
 in {
   imports = ["${modulesPath}/installer/sd-card/sd-image-armv7l-multiplatform.nix"];
   config = {

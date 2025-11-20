@@ -1,7 +1,9 @@
 {
   description = "NixOS on Banana Pi M1";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:llamato/nixpkgs/master";
+    #nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    #nixpkgs-mod.url = "github:llamato/nixpkgs/master";
     flakelight = {
       url = "github:nix-community/flakelight";
       inputs.nixpkgs.follows = "nixpkgs";
