@@ -1,8 +1,8 @@
 {
   description = "NixOS on Banana Pi M1";
   inputs = {
-    nixpkgs.url = "github:llamato/nixpkgs/master";
-    #nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     #nixpkgs-mod.url = "github:llamato/nixpkgs/master";
     flakelight = {
       url = "github:nix-community/flakelight";
@@ -34,8 +34,6 @@
             }
           );
         outputs.repl = flArgs // {inherit inputs;};
-
-        # TODO
         formatter = pkgs: pkgs.coreutils.overrideAttrs (prev: {meta = prev.meta // {mainProgram = "true";};});
       });
 }

@@ -10,13 +10,21 @@ in {
   imports = ["${modulesPath}/installer/sd-card/sd-image-armv7l-multiplatform.nix"];
   config = {
     nixpkgs = {
-      config.allowUnsupportedSystem = true;
+      config = {
+        allowUnsupportedSystem = true;
+        allowEmulation = true;
+      };
       hostPlatform.system = "armv7l-linux";
       buildPlatform.system = buildSystem;
       overlays = [inputs.self.overlays.default];
     };
 
-    nix.settings.eval-system = pkgs.system;
+    nix.settings = {
+    eval-system = pkgs.system;
+    sandbox = false;
+    experimental-features = [ "nix-command" "flakes" ];
+    distributedBuilds = true;
+  };
 
     boot = {
       initrd = {
@@ -26,7 +34,8 @@ in {
       supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ];
     };
 
-    hardware.deviceTree.enable = false; # Comes with uboot
+    hardware.deviceTree.enable = false;
+    
     systemd.network = {
       enable = true;
 
