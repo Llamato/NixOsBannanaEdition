@@ -1,12 +1,7 @@
 {
   outputs,
   ...
-}: 
-let
-  remotebuildUsers = [ "tina" ]; # Replace with the appropriate users on your client machine
-  sshKeyFile = "/home/tina/.ssh/remotebuild"; # The ssh keyfile containing the private key of the remotebuild user on the client system
-in
-{
+}: {
   system = "armv7l-linux";
   modules = [
     outputs.nixosModules.default
@@ -81,7 +76,7 @@ in
         tina = {
           isNormalUser = true;
           description = "llamato";
-          extraGroups = [ "networkmanager" "wheel" "input" ];
+          extraGroups = [ "networkmanager" "wheel" "input" "dailout" ];
           initialPassword = password;
           openssh.authorizedKeys.keys = sshKeys; 
         };
@@ -94,10 +89,12 @@ in
       environment.systemPackages = with pkgs; [
         git
         wget
-        btop
+        btop htop
         sl fastfetch hyfetch
         ethtool mtr
         minicom picocom
+        ncdu_1
+        screen tmux socat
       ];
 
       services = {

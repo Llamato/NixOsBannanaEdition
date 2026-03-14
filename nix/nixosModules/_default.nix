@@ -29,9 +29,11 @@ in {
     boot = {
       initrd = {
         includeDefaultModules = true;
-        availableKernelModules = ["mmc_block"];
+        availableKernelModules = [ "mmc_block" ];
       };
+
       supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ];
+      kernelModules = [ "i2c-dev" "sunxi-ephy" "gpio-sunxi" ];
     };
 
     hardware.deviceTree.enable = false;
@@ -67,7 +69,7 @@ in {
 
     sdImage = { 
       postBuildCommands = ''
-      dd if=${pkgs.ubootBananaPi}/u-boot-sunxi-with-spl.bin of=$img bs=1024 seek=8 conv=notrunc
+        dd if=${pkgs.ubootBananaPi}/u-boot-sunxi-with-spl.bin of=$img bs=1024 seek=8 conv=notrunc
     '';
       populateRootCommands = "";
     };
