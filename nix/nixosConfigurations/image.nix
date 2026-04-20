@@ -110,8 +110,10 @@
       
       # Networking config
       networking = {
-        hostName = "nixbpi";
-        useNetworkd = true;
+        hostName = "nixBpiM1";
+        useNetworkd = false;
+        useDHCP = false;
+        firewall.enable = false;
       };
 
       # System Config (Only change for redeploys and new deployments)
