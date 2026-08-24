@@ -95,6 +95,10 @@
         minicom picocom
         ncdu_1
         screen tmux socat
+        file
+        delta
+        ripgrep
+        atftp
       ];
 
       services = {

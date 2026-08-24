@@ -33,7 +33,7 @@ in {
       };
 
       supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" ];
-      kernelModules = [ "i2c-dev" "sunxi-ephy" "gpio-sunxi" ];
+      kernelModules = [ "i2c-dev" "sunxi-ephy" "gpio-sunxi" "spidev" ];
     };
 
     hardware.deviceTree.enable = false;
